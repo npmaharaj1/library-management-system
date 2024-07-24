@@ -5,7 +5,7 @@ typedef struct books {
     int ID;
     char* Title;
     int Author;
-}
+} Books;
 
 int main() {
     return 0;
