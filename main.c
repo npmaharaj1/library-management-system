@@ -4,7 +4,8 @@
 typedef struct books {
     int ID;
     char* Title;
-    int Author;
+    char* Author;
+     
 }
 
 int main() {
