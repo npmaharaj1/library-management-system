@@ -1,20 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define MAXTITLELENGTH 100 // Max length a books title can be
-#define MAXAUTHORLENGTH 50 // Max length an Authors name can be
-
-typedef struct books {
-    int ID;
-    char Title[MAXTITLELENGTH];
-    char Author[MAXAUTHORLENGTH];
-} Book;
-
-typedef struct list {
-    Book* book;
-    struct list* next;
-} List;
+#include <time.h> // this will be needed for date handling later
+#include "otherFunctions.h"
 
 //Read From File Function
 List* readBooksFromFile(const char* booklist) {
