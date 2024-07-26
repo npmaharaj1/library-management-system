@@ -96,6 +96,7 @@ int main() {
 
         switch (choice) {
             case 1:
+            
                 addBook(&head, booklist);
                 break;
             case 2: {
