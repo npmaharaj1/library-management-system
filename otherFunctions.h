@@ -32,8 +32,17 @@ typedef struct list {
     struct list* next;
 } List;
 
+// main.c
 void addBook(List** head, const char* booklist);
 void freeBooks(List *head);
 List* readBooksFromFile(const char* booklist);
+
+// menu.c
+void displayOptions(int optionsCount, char *options[optionsCount], const char *prompt, int selectedItemIndex);
+int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], const char *prompt);
+void functionOne(int selectedItemIndex);
+void functionTwo(int selectedItemIndex);
+void functionThree(int selectedItemIndex);
+void exitFunction();
 
 #endif

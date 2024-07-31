@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
+#include "otherFunctions.h"
 
 void displayOptions(int optionsCount, char *options[optionsCount], const char *prompt, int selectedItemIndex) {
     printw("%s", prompt);
