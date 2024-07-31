@@ -1,9 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <ncurses.h>
 
-void displayOptions(char *options[3], const char *prompt, int selectedItemIndex) {
+void displayOptions(int optionsCount, char *options[optionsCount], const char *prompt, int selectedItemIndex) {
     printw("%s", prompt);
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < optionsCount; i++) {
         char *currentOption = options[i];
         char prefix;
         if (selectedItemIndex == i) {
@@ -20,7 +21,7 @@ void displayOptions(char *options[3], const char *prompt, int selectedItemIndex)
     attroff(COLOR_PAIR(2));
 }
 
-int Run(int selectedItemIndex, char *options[3], const char *prompt, int optionsCount) {
+int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], const char *prompt) {
     int ch; // Data to store keypad stuff
     do {
         clear();
@@ -36,9 +37,32 @@ int Run(int selectedItemIndex, char *options[3], const char *prompt, int options
             }
             break;
         }
-        displayOptions(options, prompt, selectedItemIndex);
+        displayOptions(optionsCount, options, prompt, selectedItemIndex);
     } while ((ch = getch()) != '\n');
     return selectedItemIndex;
+}
+
+void functionOne(int selectedItemIndex) {
+    clear();
+    char *options[3] = {"Sub 1", "Sub 2", "Sub 3"};
+    const char *prompt = "This is a test prompt\n";
+    int optionsCount = sizeof(options) / sizeof(options[0]);
+    Run(optionsCount, selectedItemIndex, options, prompt);
+}
+
+void functionTwo(int selectedItemIndex) {
+    clear();
+    printw("This will be function two\n");
+}
+
+void functionThree(int selectedItemIndex) {
+    clear();
+    printw("This will be function three\n");
+}
+
+void exitFunction() {
+    // Clean up ncurses
+    endwin();
 }
 
 int main() {
@@ -60,17 +84,26 @@ int main() {
 
     // Visual Stuff
     int selectedItemIndex = 0; // Selected menu item in index form
-    const char *prompt = "Welcome, what would you like to do"; // Instructions for user
-    char *options[3] = {"Play", "About", "Exit"};
+    const char *prompt = "Library Management System: Welcome, Admin\nSelect an option using the arrow keys on the keyboard.\n"; // Instructions for user
+    char *options[4] = {"Function 1", "Function 2", "Function 3", "Exit"};
     int optionsCount = sizeof(options) / sizeof(options[0]);
 
-    // displayOptions(options, prompt, selectedItemIndex);
-    selectedItemIndex = Run(selectedItemIndex, options, prompt, optionsCount);
-    printw("\nPress any key to exit...\n");
+    selectedItemIndex = Run(optionsCount, selectedItemIndex, options, prompt);
+    switch (selectedItemIndex) {
+        case 0:
+            functionOne(selectedItemIndex);
+            break;
+        case 1:  printw("\nPress any key to exit...\n");
+            functionTwo(selectedItemIndex);
+            break;
+        case 2:
+            functionThree(selectedItemIndex);
+            break;
+        case 3:
+            exitFunction();
+            return 0;
+            break;
+    }
     refresh();
-
-    // Clean up ncurses
-    endwin();
-    return 0;
 }
 
