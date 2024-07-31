@@ -49,26 +49,7 @@ void addBook(List** head, const char* booklist) {
     } else {
         current->next = newNode;
     }
-
-    // Add to file
-    FILE* file = fopen(booklist, "rb+"); // Open booklist file in append bit mode
-
-    if(file == NULL) {
-        printf("Error reading file!\n"); // Throw error if the file could not be opened
-        return;
-    }
-
-    int count = 0;
-    fread(&count, sizeof(int), 1, file); // Read current count
-    count++; // Increment count for new book
-
-    fseek(file, 0, SEEK_SET); // Move to the start of the file to update the count
-    fwrite(&count, sizeof(int), 1, file); // Write updated count
-
-    fseek(file, 0, SEEK_END); // Move to the end of to append the new book
-    fwrite(newNode->book, sizeof(Book), 1, file); // Write the new book
-    fclose(file);
     
-    printf("Book added and saved successfully!\n");
+    printf("Book added successfully!\n");
     return;
 }

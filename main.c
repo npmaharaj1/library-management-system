@@ -50,7 +50,7 @@ List* readBooksFromFile(const char* booklist) {
     return head;
 }
 
-void writeBookstoFile(List* head, const char* booklist) {
+void writeBooksToFile(List* head, const char* booklist) {
     FILE* file = fopen(booklist, "wb"); // Open the file in write binary mode
     if (file == NULL) {
         printf("Error opening file for writing\n");
@@ -143,7 +143,7 @@ int main() {
                 deleteBook(&head, booklist);
                 break;
             case 4:
-                writeBookstoFile(head, booklist);
+                writeBooksToFile(head, booklist);
                 break;
             case 5:
                 printf("Exiting....\n");
