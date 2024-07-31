@@ -35,5 +35,5 @@ typedef struct list {
 void addBook(List** head, const char* booklist);
 void freeBooks(List *head);
 List* readBooksFromFile(const char* booklist);
-
+void deleteBook(List** head, const char* booklist);
 #endif

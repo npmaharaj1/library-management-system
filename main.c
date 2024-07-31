@@ -89,7 +89,8 @@ int main() {
         printf("\nLibrary Management System\n");
         printf("1. Add Book\n");
         printf("2. List Books\n");
-        printf("3. Exit\n");
+        printf("3. Delete Book\n");
+        printf("4. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
         getchar(); // Consume newline left by scanf
@@ -99,7 +100,7 @@ int main() {
             
                 addBook(&head, booklist);
                 break;
-            case 2: {
+            case 2:
                 List *current = head;
                 printf("Book list:\n\n");
                 while (current != NULL) {
@@ -108,15 +109,17 @@ int main() {
                     current = current->next;
                 }
                 break;
+            case 3:
+                deleteBook(&head, booklist);
+                break;
+            case 4:
+                printf("Exiting....\n");
+                break;
             default:
                 printf("Invalid choice, please try again!\n");
                 break;
-            }
-            case 3:
-                printf("Exiting....\n");
-                break;
         }
-    } while (choice != 3);
+    } while (choice != 4);
     
     freeBooks(head);
 

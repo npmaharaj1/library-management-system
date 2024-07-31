@@ -23,9 +23,12 @@ void addBook(List** head, const char* booklist) {
     // Book id
     List* current = *head;
     int i = 0;
-    while(current != NULL && current->next != NULL) {
+    if (current != NULL) {
         i++;
-        current = current->next;
+        while(current->next != NULL) {
+            i++;
+            current = current->next;
+        }
     }
     newNode->book->ID = i + 1;
 
@@ -35,7 +38,7 @@ void addBook(List** head, const char* booklist) {
     newNode->book->Title[strcspn(newNode->book->Title, "\n")] = 0; // Remove newline from end of title
 
     // Book Author
-    printf("Enter Book Title: ");
+    printf("Enter Author Name: ");
     fgets(newNode->book->Author, MAXAUTHORLENGTH, stdin); // Accept Author Input
     newNode->book->Author[strcspn(newNode->book->Author, "\n")] = 0; // Remove newline from end of Author
 
