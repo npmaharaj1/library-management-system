@@ -1,44 +1,71 @@
 #include <stdio.h>
-#include <termios.h>
-#include <unistd.h>
+#include <ncurses.h>
 
-void arrowKeys(struct termios oldt, struct termios newt, int ch) {
-    tcgetattr(STDIN_FILENO, &oldt); // Get terminal attributes
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO); // Disable canonical mode and echo
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Set new terminal attributes
+void keyUpArrow() {
+    printw("Up\n");
+}
 
-        ch = getchar();
-    
-        if (ch == '\033') { // Escape sequence for arrow keys
-            ch = getchar(); // Skip '['
-            switch(getchar()) {
-                case 'A':
-                    printf("Up arrow pressed\n");
-                    break;
-                case 'B':
-                    printf("Down arrow pressed\n");
-                    break;
-                case 'C':
-                    printf("Right arrow pressed\n");
-                    break;
-                case 'D':
-                    printf("Left arrow pressed\n");
-                    break;
-                default:
-                    printf("Unknown escape sequence\n");
-                    break;
-            }
-        }
+void keyDownArrow() {
+    printw("Down\n");
+}
 
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restore old terminal attributes
+void keyLeftArrow() {
+    printw("Left\n");
+}
+
+void keyRightarrow() {
+    printw("Right\n");
+}
+
+void getArrowKey(int ch) {
+    getch();
+    switch (ch) {
+        case KEY_UP:
+            keyUpArrow();
+            break;
+        case KEY_DOWN:
+            keyDownArrow();
+            break;
+        case KEY_LEFT:
+            keyLeftArrow();
+            break;
+        case KEY_RIGHT:
+            keyRightarrow();
+            break;
+    }
+}
+
+void displayOptions(char *options[3], const char *prompt) {
+    printw("%s", prompt);
+    for (int i = 0; i < 3; i++) {
+        char *currentOption = options[i];
+        printw("\n<< %s >>", currentOption);
+    }
+    printw("\n");
 }
 
 int main() {
-    struct termios oldt, newt;
-    int ch;
-    
-    arrowKeys(oldt, newt, ch);
+    // Keyboard stuff
+    initscr(); // ncurses terminal
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE); // Enable keypad
+    int ch; // keypad data
 
+    // Visual Stuff
+    int selectedItemIndex = 0; // Selected menu item in index form
+    const char *prompt = "Welcome, what would you like to do"; // Instructions for user
+    char *options[3] = {"Play", "About", "Exit"};
+
+    displayOptions(options, prompt);
+    printw("Press any key to exit...\n");
+    refresh();
+
+    getArrowKey(ch);
+    refresh();
+
+    // Clean up ncurses
+    endwin();
     return 0;
 }
+
