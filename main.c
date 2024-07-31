@@ -134,7 +134,8 @@ int main() {
         printf("3. Search\n");
         printf("4. Delete Book\n");
         printf("5. Apply Changes\n");
-        printf("6. Exit\n");
+        printf("6. Restore Changes\n");
+        printf("7. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
         getchar(); // Consume newline left by scanf
@@ -175,13 +176,16 @@ int main() {
                 writeBooksToFile(head, booklist);
                 break;
             case 6:
+                head = readBooksFromFile(booklist);
+                break;
+            case 7:
                 printf("Exiting....\n");
                 break;
             default:
                 printf("Invalid choice, please try again!\n");
                 break;
         }
-    } while (choice != 6);
+    } while (choice != 7);
     
     freeBooks(head);
 
