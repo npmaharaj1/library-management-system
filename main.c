@@ -50,6 +50,34 @@ List* readBooksFromFile(const char* booklist) {
     return head;
 }
 
+void writeBookstoFile(List* head, const char* booklist) {
+    FILE* file = fopen(booklist, "wb"); // Open the file in write binary mode
+    if (file == NULL) {
+        printf("Error opening file for writing\n");
+    }
+
+    // Count the number of books in the list
+    int count = 0;
+    List* current = head;
+    while (current != NULL) {
+        count++;
+        current = current->next;
+    }
+
+    // Write the count value to the file
+    fwrite(&count, sizeof(int), 1, file);
+
+    // Write each books data to the file
+    current = head;
+    while (current != NULL) {
+        fwrite(current->book, sizeof(Book), 1, file);
+        current = current->next;
+    }
+
+    fclose(file);
+    printf("Books Saved Successfully!\n");
+}
+
 // Free the memory of the books
 void freeBooks(List *head) {
     List *current = head;
@@ -90,7 +118,8 @@ int main() {
         printf("1. Add Book\n");
         printf("2. List Books\n");
         printf("3. Delete Book\n");
-        printf("4. Exit\n");
+        printf("4. Apply Changes\n");
+        printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
         getchar(); // Consume newline left by scanf
@@ -114,13 +143,16 @@ int main() {
                 deleteBook(&head, booklist);
                 break;
             case 4:
+                writeBookstoFile(head, booklist);
+                break;
+            case 5:
                 printf("Exiting....\n");
                 break;
             default:
                 printf("Invalid choice, please try again!\n");
                 break;
         }
-    } while (choice != 4);
+    } while (choice != 5);
     
     freeBooks(head);
 
