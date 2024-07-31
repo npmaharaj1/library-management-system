@@ -1,40 +1,6 @@
 #include <stdio.h>
 #include <ncurses.h>
 
-void keyUpArrow() {
-    printw("Up\n");
-}
-
-void keyDownArrow() {
-    printw("Down\n");
-}
-
-void keyLeftArrow() {
-    printw("Left\n");
-}
-
-void keyRightarrow() {
-    printw("Right\n");
-}
-
-void getArrowKey(int ch) {
-    getch();
-    switch (ch) {
-        case KEY_UP:
-            keyUpArrow();
-            break;
-        case KEY_DOWN:
-            keyDownArrow();
-            break;
-        case KEY_LEFT:
-            keyLeftArrow();
-            break;
-        case KEY_RIGHT:
-            keyRightarrow();
-            break;
-    }
-}
-
 void displayOptions(char *options[3], const char *prompt, int selectedItemIndex) {
     printw("%s", prompt);
     for (int i = 0; i < 3; i++) {
@@ -49,10 +15,25 @@ void displayOptions(char *options[3], const char *prompt, int selectedItemIndex)
         }
         printw("\n%c << %s >>", prefix, currentOption);
     }
-    printw("\n");
+    printf("\n");
     attroff(COLOR_PAIR(1));
     attroff(COLOR_PAIR(2));
-    
+}
+
+int Run(int selectedItemIndex, int ch, char *options[3], const char *prompt) {
+    do {
+        clear();
+        switch (ch) {
+            case KEY_UP:
+                selectedItemIndex--;
+                break;
+            case KEY_DOWN:
+                selectedItemIndex++;
+                break;
+        }
+        displayOptions(options, prompt, selectedItemIndex);
+    } while ((ch = getch()) != '\n');
+    return selectedItemIndex;
 }
 
 int main() {
@@ -74,15 +55,13 @@ int main() {
     init_pair(2, COLOR_BLACK, COLOR_WHITE);
 
     // Visual Stuff
-    int selectedItemIndex = 2; // Selected menu item in index form
+    int selectedItemIndex = 0; // Selected menu item in index form
     const char *prompt = "Welcome, what would you like to do"; // Instructions for user
     char *options[3] = {"Play", "About", "Exit"};
 
-    displayOptions(options, prompt, selectedItemIndex);
-    printw("Press any key to exit...\n");
-    refresh();
-
-    getArrowKey(ch);
+    // displayOptions(options, prompt, selectedItemIndex);
+    selectedItemIndex = Run(selectedItemIndex, ch, options, prompt);
+    printw("\nPress any key to exit...\n");
     refresh();
 
     // Clean up ncurses
