@@ -35,7 +35,7 @@ List* readBooksFromFile(const char* booklist) {
         } 
 
         fread(newNode->book, sizeof(Book), 1, file); // Read the book from the file
-        newNode->next == NULL;
+        newNode->next = NULL;
 
         if(head == NULL) {
             head = newNode; // If the head is null, assign this book to be the head
@@ -61,6 +61,20 @@ void freeBooks(List *head) {
         current = next;
     }
 }
+
+Book* searchBooks (List* head, const char* searchTerm) { 
+    List* current = head;
+    int i = 0;
+    while(current != NULL) {
+        if (!strcmp(current->book->Title, searchTerm)) { // search by Title only (at this stage) + yet to do substring searching
+            return current->book; // doesn't account for multiple results yet
+        }
+        i++;
+        current = current->next;
+    }
+    return NULL;
+}
+
 
 int main() {
     List* head = NULL; // Initialise the head of the list
@@ -89,8 +103,9 @@ int main() {
         printf("\nLibrary Management System\n");
         printf("1. Add Book\n");
         printf("2. List Books\n");
-        printf("3. Delete Book\n");
-        printf("4. Exit\n");
+        printf("3. Search\n");
+        printf("4. Delete Book\n");
+        printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
         getchar(); // Consume newline left by scanf
@@ -109,17 +124,32 @@ int main() {
                     current = current->next;
                 }
                 break;
-            case 3:
+            case 3: 
+                char search[100]; // Prompts users for input
+                printf("Enter your search query:\n");
+                scanf("%s", search);
+                searchBooks(head, search);
+                Book* result = searchBooks(head, search);
+                if (result == NULL) { // If no books found
+                    printf("No books found.\n");
+                    break;
+                } else { // Displays details of found book
+                    printf("Title: %s\n", result->Title);
+                    printf("Author: %s\n", result->Author);
+                    printf("ID: %d\n", result->ID);
+                    break;
+                }
+            case 4:
                 deleteBook(&head, booklist);
                 break;
-            case 4:
+            case 5:
                 printf("Exiting....\n");
                 break;
             default:
                 printf("Invalid choice, please try again!\n");
                 break;
         }
-    } while (choice != 4);
+    } while (choice != 5);
     
     freeBooks(head);
 
