@@ -20,16 +20,21 @@ void displayOptions(char *options[3], const char *prompt, int selectedItemIndex)
     attroff(COLOR_PAIR(2));
 }
 
-int Run(int selectedItemIndex, int ch, char *options[3], const char *prompt) {
+int Run(int selectedItemIndex, char *options[3], const char *prompt, int optionsCount) {
+    int ch; // Data to store keypad stuff
     do {
         clear();
         switch (ch) {
             case KEY_UP:
-                selectedItemIndex--;
+                if (selectedItemIndex > 0) {
+                    selectedItemIndex--;
+                }
                 break;
             case KEY_DOWN:
+            if (selectedItemIndex < optionsCount - 1) {
                 selectedItemIndex++;
-                break;
+            }
+            break;
         }
         displayOptions(options, prompt, selectedItemIndex);
     } while ((ch = getch()) != '\n');
@@ -42,7 +47,6 @@ int main() {
     cbreak();
     noecho();
     keypad(stdscr, TRUE); // Enable keypad
-    int ch; // keypad data
 
     // Initialize colours
     if (has_colors() == FALSE) {
@@ -58,9 +62,10 @@ int main() {
     int selectedItemIndex = 0; // Selected menu item in index form
     const char *prompt = "Welcome, what would you like to do"; // Instructions for user
     char *options[3] = {"Play", "About", "Exit"};
+    int optionsCount = sizeof(options) / sizeof(options[0]);
 
     // displayOptions(options, prompt, selectedItemIndex);
-    selectedItemIndex = Run(selectedItemIndex, ch, options, prompt);
+    selectedItemIndex = Run(selectedItemIndex, options, prompt, optionsCount);
     printw("\nPress any key to exit...\n");
     refresh();
 
