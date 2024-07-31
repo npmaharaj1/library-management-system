@@ -164,14 +164,6 @@ int main() {
 
     head = readBooksFromFile(booklist); // Parse the booklist file and set the head node
 
-    List* current = head;
-    while(current != NULL) {
-        printf("Book is: %s\n", current->book->Title);
-        current = current->next;
-        printf("current is: %p\n", current);
-    }
-
-
     int choice;
     do {
         printf("\nLibrary Management System\n");
