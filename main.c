@@ -101,6 +101,7 @@ int main() {
                 addBook(&head, booklist);
                 break;
             case 2:
+                // TODO: Make a better list function
                 List *current = head;
                 printf("Book list:\n\n");
                 while (current != NULL) {
