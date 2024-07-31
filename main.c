@@ -35,7 +35,7 @@ List* readBooksFromFile(const char* booklist) {
         } 
 
         fread(newNode->book, sizeof(Book), 1, file); // Read the book from the file
-        newNode->next == NULL;
+        newNode->next = NULL;
 
         if(head == NULL) {
             head = newNode; // If the head is null, assign this book to be the head
@@ -50,73 +50,35 @@ List* readBooksFromFile(const char* booklist) {
     return head;
 }
 
-// Add book function
-void addBook(List** head, const char* booklist) {
-    List* newNode = (List*)malloc(sizeof(List)); // Initialise new book node
-
-    if(newNode == NULL) {
-        printf("Memory allocation failed!\n");
-        return;
+void writeBooksToFile(List* head, const char* booklist) {
+    FILE* file = fopen(booklist, "wb"); // Open the file in write binary mode
+    if (file == NULL) {
+        printf("Error opening file for writing\n");
     }
 
-    // Initialise the book
-    newNode->book = (Book*)malloc(sizeof(Book)); // Initialize the Book struct
-    if (newNode->book == NULL) {
-        printf("Memory allocation for book failed!\n");
-        free(newNode);
-        return;
-    }
-
-    // Book id
-    List* current = *head;
-    int i = 0;
-    while(current != NULL && current->next != NULL) {
-        i++;
+    // Count the number of books in the list
+    int count = 0;
+    List* current = head;
+    while (current != NULL) {
+        count++;
         current = current->next;
     }
-    newNode->book->ID = i + 1;
 
-    // Book Title
-    printf("Enter Book Title: ");
-    fgets(newNode->book->Title, MAXTITLELENGTH, stdin); // Accept input for Title
-    newNode->book->Title[strcspn(newNode->book->Title, "\n")] = 0; // Remove Newline
+    // Write the count value to the file
+    fwrite(&count, sizeof(int), 1, file);
 
-    // Book Author
-    printf("Enter Author Name: ");
-    fgets(newNode->book->Author, MAXAUTHORLENGTH, stdin); // Accept input for Author
-    newNode->book->Author[strcspn(newNode->book->Author, "\n")] = 0; // Remove Newline
-
-    // Append book to end of list
-    newNode->next = NULL;
-    if (*head == NULL) {
-        *head = newNode;
-    } else {
-        current->next = newNode;
+    // Write each books data to the file
+    current = head;
+    while (current != NULL) {
+        fwrite(current->book, sizeof(Book), 1, file);
+        current = current->next;
     }
 
-    // Add to file
-    FILE* file = fopen(booklist, "rb+"); // Open booklist file in append bit mode
-
-    if(file == NULL) {
-        printf("Error reading file!\n"); // Throw error if the file could not be opened
-        return;
-    }
-
-    int count = 0;
-    fread(&count, sizeof(int), 1, file); // Read current count
-    count++; // Increment count for new book
-
-    fseek(file, 0, SEEK_SET); // Move to the start of the file to update the count
-    fwrite(&count, sizeof(int), 1, file); // Write updated count
-
-    fseek(file, 0, SEEK_END); // Move to the end of to append the new book
-    fwrite(newNode->book, sizeof(Book), 1, file); // Write the new book
     fclose(file);
-    
-    printf("Book added and saved successfully!\n");
-    return;
+    printf("Books Saved Successfully!\n");
 }
 
+// Free the memory of the books
 void freeBooks(List *head) {
     List *current = head;
     List *next;
@@ -127,6 +89,20 @@ void freeBooks(List *head) {
         current = next;
     }
 }
+
+Book* searchBooks (List* head, const char* searchTerm) { 
+    List* current = head;
+    int i = 0;
+    while(current != NULL) {
+        if (!strcmp(current->book->Title, searchTerm)) { // search by Title only (at this stage) + yet to do substring searching
+            return current->book; // doesn't account for multiple results yet
+        }
+        i++;
+        current = current->next;
+    }
+    return NULL;
+}
+
 
 int main() {
     List* head = NULL; // Initialise the head of the list
@@ -155,7 +131,11 @@ int main() {
         printf("\nLibrary Management System\n");
         printf("1. Add Book\n");
         printf("2. List Books\n");
-        printf("3. Exit\n");
+        printf("3. Search\n");
+        printf("4. Delete Book\n");
+        printf("5. Apply Changes\n");
+        printf("6. Restore Changes\n");
+        printf("7. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
         getchar(); // Consume newline left by scanf
@@ -164,7 +144,8 @@ int main() {
             case 1:
                 addBook(&head, booklist);
                 break;
-            case 2: {
+            case 2:
+                // TODO: Make a better list function
                 List *current = head;
                 printf("Book list:\n\n");
                 while (current != NULL) {
@@ -173,15 +154,38 @@ int main() {
                     current = current->next;
                 }
                 break;
+            case 3: 
+                char search[100]; // Prompts users for input
+                printf("Enter your search query:\n");
+                scanf("%s", search);
+                searchBooks(head, search);
+                Book* result = searchBooks(head, search);
+                if (result == NULL) { // If no books found
+                    printf("No books found.\n");
+                    break;
+                } else { // Displays details of found book
+                    printf("Title: %s\n", result->Title);
+                    printf("Author: %s\n", result->Author);
+                    printf("ID: %d\n", result->ID);
+                    break;
+                }
+            case 4:
+                deleteBook(&head, booklist);
+                break;
+            case 5:
+                writeBooksToFile(head, booklist);
+                break;
+            case 6:
+                head = readBooksFromFile(booklist);
+                break;
+            case 7:
+                printf("Exiting....\n");
+                break;
             default:
                 printf("Invalid choice, please try again!\n");
                 break;
-            }
-            case 3:
-                printf("Exiting....\n");
-                break;
         }
-    } while (choice != 3);
+    } while (choice != 7);
     
     freeBooks(head);
 

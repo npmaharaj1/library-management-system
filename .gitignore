@@ -57,3 +57,5 @@ menu
 main
 .vscode/settings.json
 .vscode/tasks.json
+*.exe
+*.o

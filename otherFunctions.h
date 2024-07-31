@@ -37,6 +37,7 @@ void addBook(List** head, const char* booklist);
 void freeBooks(List *head);
 List* readBooksFromFile(const char* booklist);
 
+
 // menu.c
 void displayOptions(int optionsCount, char *options[optionsCount], const char *prompt, int selectedItemIndex);
 int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], const char *prompt);
@@ -45,4 +46,7 @@ void functionTwo(int selectedItemIndex);
 void functionThree(int selectedItemIndex);
 void exitFunction();
 
+void writeBooksToFile(List* head, const char* booklist);
+void deleteBook(List** head, const char* booklist);
+Book* searchBooks (List* head, const char* searchTerm);
 #endif
