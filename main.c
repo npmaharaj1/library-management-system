@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h> // this will be needed for date handling later
+#include <ncurses.h> // For terminal control for UI
 #include "otherFunctions.h"
 
 //Read From File Function
@@ -105,6 +106,47 @@ Book* searchBooks (List* head, const char* searchTerm) {
 
 
 int main() {
+    //=======FRONTEND=======
+    initscr(); // ncurses.h terminal
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE); // Enable keypad
+
+    // Initialize colours
+    if (has_colors() == FALSE) {
+        endwin();
+        printf("Your terminal does not support colours\n"); // IMPLIMENT SKIP LATER
+        return 1;
+    }
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_BLACK);
+    init_pair(2, COLOR_BLACK, COLOR_WHITE);
+
+    // Visual Stuff
+    int selectedItemIndex = 0; // Selected menu item in index form
+    const char *prompt = "Library Management System: Welcome, Admin\nSelect and option using the arrow keys on the keyboard.\n"; // Prewritten instructions for user
+    char *options[4] = {"Function 1", "Function 2", "Function 3", "Exit"};
+    int optionsCount = sizeof(options) / sizeof(options[0]);
+
+    selectedItemIndex = Run(optionsCount, selectedItemIndex, options, prompt);
+    switch (selectedItemIndex) {
+        case 0:
+            functionOne(selectedItemIndex);
+            break;
+        case 1:
+            functionTwo(selectedItemIndex);
+            break;
+        case 2:
+            functionThree(selectedItemIndex);
+            break;
+        case 3:
+            exitFunction();
+            return 0;
+            break;
+    }
+    refresh();
+
+    // =======BACKEND=======
     List* head = NULL; // Initialise the head of the list
     const char* booklist = "booklist.dat"; // File name of the booklist data file
 
