@@ -76,6 +76,10 @@ void optionThree(int selectedItemIndex, List* head, const char* booklist) {
         refresh();
         current = current->next;
     }
+
+    printw("Press any key to continue...");
+    refresh();
+    getch();
 }
 
 void optionFour(int selectedItemIndex, List* head, const char* booklist) {
@@ -97,6 +101,7 @@ void optionFour(int selectedItemIndex, List* head, const char* booklist) {
 }
 
 void exitFunction(List* head) {
+    clear();
     freeBooks(head);
     endwin();
 }
