@@ -106,46 +106,6 @@ Book* searchBooks (List* head, const char* searchTerm) {
 
 
 int main() {
-    //=======FRONTEND=======
-    initscr(); // ncurses.h terminal
-    cbreak();
-    noecho();
-    keypad(stdscr, TRUE); // Enable keypad
-
-    // Initialize colours
-    if (has_colors() == FALSE) {
-        endwin();
-        printf("Your terminal does not support colours\n"); // IMPLIMENT SKIP LATER
-        return 1;
-    }
-    start_color();
-    init_pair(1, COLOR_WHITE, COLOR_BLACK);
-    init_pair(2, COLOR_BLACK, COLOR_WHITE);
-
-    // Visual Stuff
-    int selectedItemIndex = 0; // Selected menu item in index form
-    const char *prompt = "Library Management System: Welcome, Admin\nSelect and option using the arrow keys on the keyboard.\n"; // Prewritten instructions for user
-    char *options[4] = {"Function 1", "Function 2", "Function 3", "Exit"};
-    int optionsCount = sizeof(options) / sizeof(options[0]);
-
-    selectedItemIndex = Run(optionsCount, selectedItemIndex, options, prompt);
-    switch (selectedItemIndex) {
-        case 0:
-            functionOne(selectedItemIndex);
-            break;
-        case 1:
-            functionTwo(selectedItemIndex);
-            break;
-        case 2:
-            functionThree(selectedItemIndex);
-            break;
-        case 3:
-            exitFunction();
-            return 0;
-            break;
-    }
-    refresh();
-
     // =======BACKEND=======
     List* head = NULL; // Initialise the head of the list
     const char* booklist = "booklist.dat"; // File name of the booklist data file
@@ -168,70 +128,88 @@ int main() {
 
     head = readBooksFromFile(booklist); // Parse the booklist file and set the head node
 
-    int choice;
-    do {
-        printf("\nLibrary Management System\n");
-        printf("1. Add Book\n");
-        printf("2. List Books\n");
-        printf("3. Search\n");
-        printf("4. Delete Book\n");
-        printf("5. Apply Changes\n");
-        printf("6. Restore Changes\n");
-        printf("7. Exit\n");
-        printf("Enter your choice: ");
-        scanf("%d", &choice);
-        getchar(); // Consume newline left by scanf
+    //=======FRONTEND=======
+    initscr(); // ncurses.h terminal
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE); // Enable keypad
 
-        switch (choice) {
-            case 1:
-                addBook(&head, booklist);
-                break;
-            case 2:
-                // TODO: Make a better list function
-                List *current = head;
-                printf("Book list:\n\n");
-                while (current != NULL) {
-                    printf("ID: %d, Title: %s, Author: %s\n",
-                           current->book->ID, current->book->Title, current->book->Author);
-                    current = current->next;
-                }
-                break;
-            case 3: 
-                char search[100]; // Prompts users for input
-                printf("Enter your search query:\n");
-                scanf("%s", search);
-                searchBooks(head, search);
-                Book* result = searchBooks(head, search);
-                if (result == NULL) { // If no books found
-                    printf("No books found.\n");
-                    break;
-                } else { // Displays details of found book
-                    printf("Title: %s\n", result->Title);
-                    printf("Author: %s\n", result->Author);
-                    printf("ID: %d\n", result->ID);
-                    break;
-                }
-            case 4:
-                deleteBook(&head, booklist);
-                break;
-            case 5:
-                writeBooksToFile(head, booklist);
-                break;
-            case 6:
-                head = readBooksFromFile(booklist);
-                break;
-            case 7:
-                printf("Exiting....\n");
-                break;
-            default:
-                printf("Invalid choice, please try again!\n");
-                break;
-        }
-    } while (choice != 7);
+    // Initialize colours
+    if (has_colors() == FALSE) {
+        endwin();
+        printf("Your terminal does not support colours\n"); // IMPLIMENT SKIP LATER
+        return 1;
+    }
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_BLACK);
+    init_pair(2, COLOR_BLACK, COLOR_WHITE);
+
+    // Visual Stuff
+    int selectedItemIndex = 0; // Selected menu item in index form
+    const char *prompt = "Library Management System: Welcome, Admin\nSelect and option using the arrow keys on the keyboard.\n"; // Prewritten instructions for user
+    char *options[5] = {"Search for Books", "Modify Book Data", "List Books", "Save or Restore", "Exit"};
+    int optionsCount = sizeof(options) / sizeof(options[0]);
     
-    freeBooks(head);
-
-    
-
-    return 0;
+    menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
 }
+
+    // int choice;
+    // do {
+    //     printf("\nLibrary Management System\n");
+    //     printf("1. Add Book\n");
+    //     printf("2. List Books\n");
+    //     printf("3. Search\n");
+    //     printf("4. Delete Book\n");
+    //     printf("5. Apply Changes\n");
+    //     printf("6. Restore Changes\n");
+    //     printf("7. Exit\n");
+    //     printf("Enter your choice: ");
+    //     scanf("%d", &choice);
+    //     getchar(); // Consume newline left by scanf
+
+    //     switch (choice) {
+    //         case 1:
+    //             addBook(&head, booklist);
+    //             break;
+    //         case 2:
+    //             // TODO: Make a better list function
+    //             List *current = head;
+    //             printf("Book list:\n\n");
+    //             while (current != NULL) {
+    //                 printf("ID: %d, Title: %s, Author: %s\n",
+    //                        current->book->ID, current->book->Title, current->book->Author);
+    //                 current = current->next;
+    //             }
+    //             break;
+    //         case 3: 
+    //             char search[100]; // Prompts users for input
+    //             printf("Enter your search query:\n");
+    //             scanf("%s", search);
+    //             searchBooks(head, search);
+    //             Book* result = searchBooks(head, search);
+    //             if (result == NULL) { // If no books found
+    //                 printf("No books found.\n");
+    //                 break;
+    //             } else { // Displays details of found book
+    //                 printf("Title: %s\n", result->Title);
+    //                 printf("Author: %s\n", result->Author);
+    //                 printf("ID: %d\n", result->ID);
+    //                 break;
+    //             }
+    //         case 4:
+    //             deleteBook(&head, booklist);
+    //             break;
+    //         case 5:
+    //             writeBooksToFile(head, booklist);
+    //             break;
+    //         case 6:
+    //             head = readBooksFromFile(booklist);
+    //             break;
+    //         case 7:
+    //             printf("Exiting....\n");
+    //             break;
+    //         default:
+    //             printf("Invalid choice, please try again!\n");
+    //             break;
+    //     }
+    // } while (choice != 7);

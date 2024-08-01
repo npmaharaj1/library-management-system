@@ -2,20 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ncurses.h>
 #include "otherFunctions.h"
 
 void addBook(List** head, const char* booklist) {
     List* newNode = (List*)malloc(sizeof(List)); // Initialise new book node
 
     if(newNode == NULL) {
-        printf("Memory allocation failed!\n");
+        printw("\nMemory allocation failed!\n");
+        refresh();
         return;
     }
 
     // Initialise book
     newNode->book = (Book*)malloc(sizeof(Book)); // Initialise book structure
     if(newNode->book == NULL) {
-        printf("Memory allocation for book failed\n");
+        printw("\nMemory allocation for book failed\n");
+        refresh();
         free(newNode);
         return;
     }
@@ -32,13 +35,21 @@ void addBook(List** head, const char* booklist) {
     }
 
     // Book Title
-    printf("Enter Book Title: ");
-    fgets(newNode->book->Title, MAXTITLELENGTH, stdin); // Accept Book Title Input
+    printw("\nEnter Book Title: ");
+    // fgets(newNode->book->Title, MAXTITLELENGTH, stdin); // Accept Book Title Input
+    refresh();
+    echo();
+    scanw("%99[^\n]", newNode->book->Title); // Accept Book Title Input
+    noecho();
     newNode->book->Title[strcspn(newNode->book->Title, "\n")] = 0; // Remove newline from end of title
 
     // Book Author
-    printf("Enter Author Name: ");
-    fgets(newNode->book->Author, MAXAUTHORLENGTH, stdin); // Accept Author Input
+    printw("Enter Author Name: ");
+    // fgets(newNode->book->Author, MAXAUTHORLENGTH, stdin); // Accept Author Input
+    refresh();
+    echo();
+    scanw("%99[^\n]", newNode->book->Author);
+    noecho();
     newNode->book->Author[strcspn(newNode->book->Author, "\n")] = 0; // Remove newline from end of Author
 
     // Append book to end of list
@@ -49,14 +60,17 @@ void addBook(List** head, const char* booklist) {
         current->next = newNode;
     }
     
-    printf("Book added successfully!\n");
+    printw("Book added successfully!\n");
+    refresh();
     return;
+    
 }
 
 void deleteBook(List** head, const char* booklist) {
 
     if (head == NULL || *head == NULL) {
-        printf("No nodes to search\n");
+        printw("No nodes to search\n");
+        refresh();
         return;
     }
     
@@ -64,14 +78,19 @@ void deleteBook(List** head, const char* booklist) {
     List* current = *head;
     List* previous = NULL;
     if (current == NULL) {
-        printf("No nodes to search");
+        printw("No nodes to search");
+        refresh();
         return;
     }
 
     // Searchfor book to be deleted
     char searchedBook[MAXTITLELENGTH];
-    printf("Enter the book title to find: ");
-    fgets(searchedBook, MAXTITLELENGTH, stdin); // Accept Input
+    printw("\nEnter the book title to find: ");
+    refresh();
+    echo();
+    // fgets(searchedBook, MAXTITLELENGTH, stdin); // Accept Input
+    scanw("%99s", searchedBook);
+    noecho();
     searchedBook[strcspn(searchedBook, "\n")] = 0; // Remove Newline
 
     // List all books with matching title
@@ -82,7 +101,8 @@ void deleteBook(List** head, const char* booklist) {
         if (strcmp(current->book->Title, searchedBook) == 0){
             List* newNode = (List *)malloc(sizeof(List));
             if (newNode == NULL) {
-                printf("Memory Allocation Error");
+                printw("Memory Allocation Error");
+                refresh();
                 return;
             }
 
@@ -104,11 +124,13 @@ void deleteBook(List** head, const char* booklist) {
     // Print the book/s ID and Title
     deleteCurrent = deleteHead; // Reset delete traversal node
     if (deleteHead == NULL) {
-        printf("Book not found!\n");
+        printw("Book not found!\n");
+        refresh();
     } else {
         // Print all of the books found
         while (deleteCurrent != NULL) {
-            printf("%d, %s\n", deleteCurrent->book->ID, deleteCurrent->book->Title);
+            printw("%d, %s\n", deleteCurrent->book->ID, deleteCurrent->book->Title);
+            refresh();
             deleteCurrent = deleteCurrent->next;
         }
     }
@@ -116,9 +138,12 @@ void deleteBook(List** head, const char* booklist) {
 
     // Confirm which book is to be deleted
     int deleteBookID;
-    printf("Enter Book ID to be Deleted: ");
-    scanf("%d", &deleteBookID);
-    getchar();
+    printw("Enter Book ID to be Deleted: ");
+    refresh();
+    echo();
+    // scanf("%d", &deleteBookID);
+    scanw("%d", &deleteBookID);
+    noecho();
 
 
     // Iterate through Book again to find the ID
@@ -132,9 +157,11 @@ void deleteBook(List** head, const char* booklist) {
 
     // Check if book ID is valid, print deleting message
     if (current != NULL && strcmp(current->book->Title, searchedBook) == 0) {
-        printf("Deleting book %d: %s by %s ...\n", current->book->ID, current->book->Title, current->book->Author);
+        printw("Deleting book %d: %s by %s ...\n", current->book->ID, current->book->Title, current->book->Author);
+        refresh();
     } else {
-        printf("Invalid Input!\n");
+        printw("Invalid Input!\n");
+        refresh();
         return;
     }
 

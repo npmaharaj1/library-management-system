@@ -59,3 +59,4 @@ main
 .vscode/tasks.json
 *.exe
 *.o
+booklist.dat

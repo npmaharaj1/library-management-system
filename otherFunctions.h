@@ -41,10 +41,12 @@ List* readBooksFromFile(const char* booklist);
 // menu.c
 void displayOptions(int optionsCount, char *options[optionsCount], const char *prompt, int selectedItemIndex);
 int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], const char *prompt);
-void functionOne(int selectedItemIndex);
-void functionTwo(int selectedItemIndex);
-void functionThree(int selectedItemIndex);
-void exitFunction();
+void optionOne(int selectedItemIndex);
+void optionTwo(int selectedItemIndex, List* head, const char* booklist);
+void optionThree(int selectedItemIndex, List* head, const char* booklist);
+void optionFour(int selectedItemIndex, List* head, const char* booklist);
+void exitFunction(List* head);
+void menuHome(int selectedItemIndex, int optionsCount, char *options[optionsCount], const char *prompt, List* head, const char* booklist);
 
 void writeBooksToFile(List* head, const char* booklist);
 void deleteBook(List** head, const char* booklist);

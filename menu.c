@@ -43,25 +43,94 @@ int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], co
     return selectedItemIndex;
 }
 
-void functionOne(int selectedItemIndex) {
+void optionOne(int selectedItemIndex) {
     clear();
-    char *options[3] = {"Sub 1", "Sub 2", "Sub 3"};
-    const char *prompt = "This is a test prompt\n";
+}
+
+void optionTwo(int selectedItemIndex, List* head, const char* booklist) {
+    clear();
+    char *options[2] = {"Add Books", "Delete Books"};
+    const char *prompt = "Home/Modify Book Data/\n";
     int optionsCount = sizeof(options) / sizeof(options[0]);
-    Run(optionsCount, selectedItemIndex, options, prompt);
+    selectedItemIndex = 0;
+    selectedItemIndex = Run(optionsCount, selectedItemIndex, options, prompt);
+    
+    switch (selectedItemIndex) {
+        case 0:
+            addBook(&head, booklist);
+            break;
+        case 1:
+            deleteBook(&head, booklist);
+            break;
+    }
 }
 
-void functionTwo(int selectedItemIndex) {
+void optionThree(int selectedItemIndex, List* head, const char* booklist) {
     clear();
-    printw("This will be function two\n");
+    // TODO: Make a better list function
+    List *current = head;
+    printw("Book list:\n\n");
+    refresh();
+    while (current != NULL) {
+        printw("ID: %d, Title: %s, Author: %s\n", current->book->ID, current->book->Title, current->book->Author);
+        refresh();
+        current = current->next;
+    }
 }
 
-void functionThree(int selectedItemIndex) {
+void optionFour(int selectedItemIndex, List* head, const char* booklist) {
     clear();
-    printw("This will be function three\n");
+    char *options[2] = {"Apply Changes", "Restore Changes"};
+    const char *prompt = "Home/Save or Restore\n";
+    int optionsCount = sizeof(options) / sizeof(options[0]);
+    selectedItemIndex = 0;
+    selectedItemIndex = Run(optionsCount, selectedItemIndex, options, prompt);
+
+    switch (selectedItemIndex) {
+        case 0:
+            writeBooksToFile(head, booklist);
+            break;
+        case 1:
+            head = readBooksFromFile(booklist);
+            break;
+        }
 }
 
-void exitFunction() {
-    // Clean up ncurses
+void exitFunction(List* head) {
+    freeBooks(head);
     endwin();
 }
+
+void menuHome(int selectedItemIndex, int optionsCount, char* options[optionsCount], const char *prompt, List* head, const char* booklist) {
+    selectedItemIndex = Run(optionsCount, selectedItemIndex, options, prompt);
+    switch (selectedItemIndex) {
+        case 0:
+            optionOne(selectedItemIndex);
+            menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
+            break;
+        case 1:
+            optionTwo(selectedItemIndex, head, booklist);
+            menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
+            break;
+        case 2:
+            optionThree(selectedItemIndex, head, booklist);
+            menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
+            break;
+        case 3:
+            optionFour(selectedItemIndex, head, booklist);
+            menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
+            break;
+        case 4:
+            exitFunction(head);
+            break;
+    }
+    refresh();
+}
+// SUB-MENU CODE
+// void optionOne(int selectedItemIndex) {
+//     clear();
+//     char *options[3] = {"Sub 1", "Sub 2", "Sub 3"};
+//     const char *prompt = "This is a test prompt\n";
+//     int optionsCount = sizeof(options) / sizeof(options[0]);
+//     Run(optionsCount, selectedItemIndex, options, prompt);
+// }
