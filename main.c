@@ -133,7 +133,6 @@ int main() {
     cbreak();
     noecho();
     keypad(stdscr, TRUE); // Enable keypad
-    curs_set(0);
 
     // Initialize colours
     if (has_colors() == FALSE) {
