@@ -39,18 +39,34 @@ void addBook(List** head, const char* booklist) {
     // fgets(newNode->book->Title, MAXTITLELENGTH, stdin); // Accept Book Title Input
     refresh();
     echo();
-    scanw("%99[^\n]", newNode->book->Title); // Accept Book Title Input
+    wgetnstr(stdscr, newNode->book->Title, sizeof(newNode->book->Title) - 1); // Accept Book Title Input
     noecho();
-    newNode->book->Title[strcspn(newNode->book->Title, "\n")] = 0; // Remove newline from end of title
+    // newNode->book->Title[strcspn(newNode->book->Title, "\n")] = 0; // Remove newline from end of title
+
+    if (strlen(newNode->book->Title) == 0) {
+        printw("\nBook Title cannot be empty!\n");
+        refresh();
+        free(newNode->book);
+        free(newNode);
+        return;
+    }
 
     // Book Author
     printw("Enter Author Name: ");
     // fgets(newNode->book->Author, MAXAUTHORLENGTH, stdin); // Accept Author Input
     refresh();
     echo();
-    scanw("%99[^\n]", newNode->book->Author);
+    wgetnstr(stdscr, newNode->book->Author, sizeof(newNode->book->Author) - 1);
     noecho();
-    newNode->book->Author[strcspn(newNode->book->Author, "\n")] = 0; // Remove newline from end of Author
+    // newNode->book->Author[strcspn(newNode->book->Author, "\n")] = 0; // Remove newline from end of Author
+
+    if (strlen(newNode->book->Author) == 0) {
+        printw("\nAuthor Name cannot be empty!\n");
+        refresh();
+        free(newNode->book);
+        free(newNode);
+        return;
+    }
 
     // Append book to end of list
     newNode->next = NULL;
@@ -63,7 +79,6 @@ void addBook(List** head, const char* booklist) {
     printw("Book added successfully!\n");
     refresh();
     return;
-    
 }
 
 void deleteBook(List** head, const char* booklist) {
@@ -126,6 +141,7 @@ void deleteBook(List** head, const char* booklist) {
     if (deleteHead == NULL) {
         printw("Book not found!\n");
         refresh();
+        return;
     } else {
         // Print all of the books found
         while (deleteCurrent != NULL) {

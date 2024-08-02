@@ -1,5 +1,5 @@
 #ifndef OTHERFUNCTIONS_H
-#define OTHERFUNCtiONS_H
+#define OTHERFUNCTIONS_H
 
 #define MAXTITLELENGTH 100 // Max length a books title can be
 #define MAXAUTHORLENGTH 50 // Max length an Authors name can be
@@ -37,16 +37,15 @@ void addBook(List** head, const char* booklist);
 void freeBooks(List *head);
 List* readBooksFromFile(const char* booklist);
 
-
 // menu.c
 void displayOptions(int optionsCount, char *options[optionsCount], const char *prompt, int selectedItemIndex);
 int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], const char *prompt);
 void optionOne(int selectedItemIndex);
-void optionTwo(int selectedItemIndex, List* head, const char* booklist);
+void optionTwo(int selectedItemIndex, List** head, const char* booklist);
 void optionThree(int selectedItemIndex, List* head, const char* booklist);
-void optionFour(int selectedItemIndex, List* head, const char* booklist);
+void optionFour(int selectedItemIndex, List** head, const char* booklist);
 void exitFunction(List* head);
-void menuHome(int selectedItemIndex, int optionsCount, char *options[optionsCount], const char *prompt, List* head, const char* booklist);
+void menuHome(int* selectedItemIndex, int optionsCount, char *options[optionsCount], const char *prompt, List** head, const char* booklist);
 
 void writeBooksToFile(List* head, const char* booklist);
 void deleteBook(List** head, const char* booklist);

@@ -150,5 +150,5 @@ int main() {
     char *options[5] = {"Search for Books", "Modify Book Data", "List Books", "Save or Restore", "Exit"};
     int optionsCount = sizeof(options) / sizeof(options[0]);
     
-    menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
+    menuHome(&selectedItemIndex, optionsCount, options, prompt, &head, booklist);
 }

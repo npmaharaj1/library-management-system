@@ -23,7 +23,7 @@ void displayOptions(int optionsCount, char *options[optionsCount], const char *p
 }
 
 int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], const char *prompt) {
-    int ch; // Data to store keypad stuff
+    int ch = 0; // Data to store keypad stuff
     do {
         clear();
         switch (ch) {
@@ -47,7 +47,7 @@ void optionOne(int selectedItemIndex) {
     clear();
 }
 
-void optionTwo(int selectedItemIndex, List* head, const char* booklist) {
+void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
     clear();
     char *options[2] = {"Add Books", "Delete Books"};
     const char *prompt = "Home/Modify Book Data/\n";
@@ -57,10 +57,10 @@ void optionTwo(int selectedItemIndex, List* head, const char* booklist) {
     
     switch (selectedItemIndex) {
         case 0:
-            addBook(&head, booklist);
+            addBook(head, booklist);
             break;
         case 1:
-            deleteBook(&head, booklist);
+            deleteBook(head, booklist);
             break;
     }
 }
@@ -82,7 +82,7 @@ void optionThree(int selectedItemIndex, List* head, const char* booklist) {
     getch();
 }
 
-void optionFour(int selectedItemIndex, List* head, const char* booklist) {
+void optionFour(int selectedItemIndex, List** head, const char* booklist) {
     clear();
     char *options[2] = {"Apply Changes", "Restore Changes"};
     const char *prompt = "Home/Save or Restore\n";
@@ -92,10 +92,10 @@ void optionFour(int selectedItemIndex, List* head, const char* booklist) {
 
     switch (selectedItemIndex) {
         case 0:
-            writeBooksToFile(head, booklist);
+            writeBooksToFile(*head, booklist);
             break;
         case 1:
-            head = readBooksFromFile(booklist);
+            *head = readBooksFromFile(booklist);
             break;
         }
 }
@@ -106,27 +106,27 @@ void exitFunction(List* head) {
     endwin();
 }
 
-void menuHome(int selectedItemIndex, int optionsCount, char* options[optionsCount], const char *prompt, List* head, const char* booklist) {
-    selectedItemIndex = Run(optionsCount, selectedItemIndex, options, prompt);
-    switch (selectedItemIndex) {
+void menuHome(int* selectedItemIndex, int optionsCount, char* options[optionsCount], const char *prompt, List** head, const char* booklist) {
+    *selectedItemIndex = Run(optionsCount, *selectedItemIndex, options, prompt);
+    switch (*selectedItemIndex) {
         case 0:
-            optionOne(selectedItemIndex);
+            optionOne(*selectedItemIndex);
             menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
             break;
         case 1:
-            optionTwo(selectedItemIndex, head, booklist);
+            optionTwo(*selectedItemIndex, head, booklist);
             menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
             break;
         case 2:
-            optionThree(selectedItemIndex, head, booklist);
+            optionThree(*selectedItemIndex, *head, booklist);
             menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
             break;
         case 3:
-            optionFour(selectedItemIndex, head, booklist);
+            optionFour(*selectedItemIndex, head, booklist);
             menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
             break;
         case 4:
-            exitFunction(head);
+            exitFunction(*head);
             break;
     }
     refresh();
