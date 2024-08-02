@@ -43,13 +43,23 @@ int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], co
     return selectedItemIndex;
 }
 
+void goBackHome(List* head, const char* booklist) {
+    int selectedItemIndex = 0; // Selected menu item in index form
+    const char *prompt = "Library Management System: Welcome, Admin\nSelect and option using the arrow keys on the keyboard.\n"; // Prewritten instructions for user
+    char *options[5] = {"Search for Books", "Modify Book Data", "List Books", "Save or Restore", "Exit"};
+    int optionsCount = sizeof(options) / sizeof(options[0]);
+
+
+    menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
+}
+
 void optionOne(int selectedItemIndex) {
     clear();
 }
 
 void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
     clear();
-    char *options[2] = {"Add Books", "Delete Books"};
+    char *options[3] = {"Add Books", "Delete Books", "Return Home"};
     const char *prompt = "Home/Modify Book Data/\n";
     int optionsCount = sizeof(options) / sizeof(options[0]);
     selectedItemIndex = 0;
@@ -61,6 +71,10 @@ void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
             break;
         case 1:
             deleteBook(head, booklist);
+            break;
+        case 2:
+            clear();
+            goBackHome(head, booklist);
             break;
     }
 }
@@ -101,7 +115,6 @@ void optionFour(int selectedItemIndex, List** head, const char* booklist) {
 }
 
 void exitFunction(List* head) {
-    clear();
     freeBooks(head);
     endwin();
 }
@@ -131,11 +144,3 @@ void menuHome(int* selectedItemIndex, int optionsCount, char* options[optionsCou
     }
     refresh();
 }
-// SUB-MENU CODE
-// void optionOne(int selectedItemIndex) {
-//     clear();
-//     char *options[3] = {"Sub 1", "Sub 2", "Sub 3"};
-//     const char *prompt = "This is a test prompt\n";
-//     int optionsCount = sizeof(options) / sizeof(options[0]);
-//     Run(optionsCount, selectedItemIndex, options, prompt);
-// }
