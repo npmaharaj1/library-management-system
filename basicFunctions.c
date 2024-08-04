@@ -82,6 +82,16 @@ void addBook(List** head, const char* booklist) {
     
     printw("Book added successfully!\n");
     refresh();
+
+    char addAnother;
+    printw("\nAdd Another? (y/N): ");
+    refresh();
+    curs_set(1);
+    scanw("%c", &addAnother);
+    curs_set(0);
+    if (addAnother == 'Y' || addAnother == 'y') {
+        addBook(head, booklist);
+    }
     return;
 }
 
@@ -203,6 +213,10 @@ void deleteBook(List** head, const char* booklist) {
         deleteCurrent = deleteCurrent->next;
         free(temp);
     }
+
+    printw("\nPress any key to continue...");
+    refresh();
+    getch();
 
     return;
 }
