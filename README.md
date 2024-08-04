@@ -2,7 +2,7 @@
 
 - [x] Cache read
 - [ ] Book list
-- [ ] Search
+- [x] Search
 - [x] Add Books
 - [x] Delete Books
 - [x] Write to file
