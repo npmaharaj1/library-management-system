@@ -49,8 +49,10 @@ void optionOne(int selectedItemIndex, List* head) {
 
     printw("\nEnter your search query: ");
     refresh();
+    curs_set(1);
     echo();
     wgetnstr(stdscr, search, sizeof(search) - 1);
+    curs_set(0);
     noecho();
     searchBooks(head, search);
     List* result = searchBooks(head, search);
