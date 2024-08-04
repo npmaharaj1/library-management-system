@@ -43,8 +43,32 @@ int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], co
     return selectedItemIndex;
 }
 
-void optionOne(int selectedItemIndex) {
+void optionOne(int selectedItemIndex, List* head) {
     clear();
+    char search[100]; // Prompts users for input
+
+    printw("\nEnter your search query: ");
+    refresh();
+    echo();
+    wgetnstr(stdscr, search, sizeof(search) - 1);
+    noecho();
+    searchBooks(head, search);
+    List* result = searchBooks(head, search);
+
+    if (result == NULL) { // If no books found
+        printw("No books found.\n");
+    }
+    // Loop through results list and display
+    while (result != NULL) {
+        printw("Title: %s\n", result->book->Title);
+        printw("Author: %s\n", result->book->Author);
+        printw("ID: %d\n", result->book->ID);
+        printw("\n");
+        result = result->next;
+    }
+    printw("\nPress any key to continue...");
+    refresh();
+    getch();
 }
 
 void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
@@ -110,7 +134,7 @@ void menuHome(int* selectedItemIndex, int optionsCount, char* options[optionsCou
     *selectedItemIndex = Run(optionsCount, *selectedItemIndex, options, prompt);
     switch (*selectedItemIndex) {
         case 0:
-            optionOne(*selectedItemIndex);
+            optionOne(*selectedItemIndex, *head);
             menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
             break;
         case 1:

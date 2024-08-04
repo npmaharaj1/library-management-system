@@ -1,9 +1,13 @@
+// For strcasestr.
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h> // this will be needed for date handling later
 #include <ncurses.h> // For terminal control for UI
 #include "otherFunctions.h"
+
 
 //Read From File Function
 List* readBooksFromFile(const char* booklist) {
@@ -91,17 +95,36 @@ void freeBooks(List *head) {
     }
 }
 
-Book* searchBooks (List* head, const char* searchTerm) { 
+// Search by title / author
+List* searchBooks (List* head, const char* searchTerm) { 
+    List* rHead = NULL; // Initialising head of the result list
+    List* rTail = NULL;
     List* current = head;
-    int i = 0;
-    while(current != NULL) {
-        if (!strcmp(current->book->Title, searchTerm)) { // search by Title only (at this stage) + yet to do substring searching
-            return current->book; // doesn't account for multiple results yet
+
+    // Loops through booklist
+    while(current != NULL) { 
+        // If substring match found in title and author (not case sensitive) 
+        if (strcasestr(current->book->Title, searchTerm) || strcasestr(current->book->Author, searchTerm)) {
+            // Assign values to temporary match 
+            List* match = (List*)malloc(sizeof(List));
+            match->book = (Book*)malloc(sizeof(Book));
+            memcpy(match->book->Title, current->book->Title, sizeof(current->book->Title));
+            memcpy(match->book->Author, current->book->Author, sizeof(current->book->Author));
+            match->book->ID = current->book->ID;
+            match->next = NULL;
+
+            // Updating Head + Tail if applicable
+            if (rHead == NULL) { 
+                rHead = match; 
+                rTail = match;
+            } else {
+                rTail->next = match;
+                rTail = rTail->next;
+            }
         }
-        i++;
         current = current->next;
     }
-    return NULL;
+    return rHead; // Returns head for the linked list of matches
 }
 
 
