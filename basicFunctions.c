@@ -86,8 +86,10 @@ void addBook(List** head, const char* booklist) {
     char addAnother;
     printw("\nAdd Another? (y/N): ");
     refresh();
+    echo();
     curs_set(1);
     scanw("%c", &addAnother);
+    noecho();
     curs_set(0);
     if (addAnother == 'Y' || addAnother == 'y') {
         addBook(head, booklist);
