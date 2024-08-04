@@ -39,8 +39,10 @@ void addBook(List** head, const char* booklist) {
     // fgets(newNode->book->Title, MAXTITLELENGTH, stdin); // Accept Book Title Input
     refresh();
     echo();
+    curs_set(1);
     wgetnstr(stdscr, newNode->book->Title, sizeof(newNode->book->Title) - 1); // Accept Book Title Input
     noecho();
+    curs_set(0);
     // newNode->book->Title[strcspn(newNode->book->Title, "\n")] = 0; // Remove newline from end of title
 
     if (strlen(newNode->book->Title) == 0) {
@@ -56,8 +58,10 @@ void addBook(List** head, const char* booklist) {
     // fgets(newNode->book->Author, MAXAUTHORLENGTH, stdin); // Accept Author Input
     refresh();
     echo();
+    curs_set(1);
     wgetnstr(stdscr, newNode->book->Author, sizeof(newNode->book->Author) - 1);
     noecho();
+    curs_set(0);
     // newNode->book->Author[strcspn(newNode->book->Author, "\n")] = 0; // Remove newline from end of Author
 
     if (strlen(newNode->book->Author) == 0) {
@@ -103,9 +107,10 @@ void deleteBook(List** head, const char* booklist) {
     printw("\nEnter the book title to find: ");
     refresh();
     echo();
-    // fgets(searchedBook, MAXTITLELENGTH, stdin); // Accept Input
+    curs_set(1);
     scanw("%99s", searchedBook);
     noecho();
+    curs_set(0);
     searchedBook[strcspn(searchedBook, "\n")] = 0; // Remove Newline
 
     // List all books with matching title
@@ -157,9 +162,10 @@ void deleteBook(List** head, const char* booklist) {
     printw("Enter Book ID to be Deleted: ");
     refresh();
     echo();
-    // scanf("%d", &deleteBookID);
+    curs_set(1);
     scanw("%d", &deleteBookID);
     noecho();
+    curs_set(0);
 
 
     // Iterate through Book again to find the ID
