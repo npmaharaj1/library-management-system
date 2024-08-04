@@ -40,7 +40,7 @@ List* readBooksFromFile(const char* booklist);
 // menu.c
 void displayOptions(int optionsCount, char *options[optionsCount], const char *prompt, int selectedItemIndex);
 int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], const char *prompt);
-void optionOne(int selectedItemIndex);
+void optionOne(int selectedItemIndex, List* head);
 void optionTwo(int selectedItemIndex, List** head, const char* booklist);
 void optionThree(int selectedItemIndex, List* head, const char* booklist);
 void optionFour(int selectedItemIndex, List** head, const char* booklist);
@@ -49,5 +49,5 @@ void menuHome(int* selectedItemIndex, int optionsCount, char *options[optionsCou
 
 void writeBooksToFile(List* head, const char* booklist);
 void deleteBook(List** head, const char* booklist);
-Book* searchBooks (List* head, const char* searchTerm);
+List* searchBooks (List* head, const char* searchTerm);
 #endif
