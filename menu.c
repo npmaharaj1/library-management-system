@@ -157,11 +157,3 @@ void menuHome(int* selectedItemIndex, int optionsCount, char* options[optionsCou
     }
     refresh();
 }
-// SUB-MENU CODE
-// void optionOne(int selectedItemIndex) {
-//     clear();
-//     char *options[3] = {"Sub 1", "Sub 2", "Sub 3"};
-//     const char *prompt = "This is a test prompt\n";
-//     int optionsCount = sizeof(options) / sizeof(options[0]);
-//     Run(optionsCount, selectedItemIndex, options, prompt);
-// }
