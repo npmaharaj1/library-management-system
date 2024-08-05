@@ -83,6 +83,9 @@ void addBook(List** head, const char* booklist) {
     printw("Book added successfully!\n");
     refresh();
 
+    free(newNode->book);
+    free(newNode);
+
     char addAnother;
     printw("\nAdd Another? (y/N): ");
     refresh();
@@ -93,6 +96,20 @@ void addBook(List** head, const char* booklist) {
     curs_set(0);
     if (addAnother == 'Y' || addAnother == 'y') {
         addBook(head, booklist);
+    } else {
+        char applyChanges;
+        printw("\nApply Changes? (Y/n): ");
+        refresh();
+        echo();
+        curs_set(1);
+        scanf("%c", &applyChanges);
+        noecho();
+        curs_set(0);
+        if (applyChanges == 'N' || applyChanges == 'n') {
+            return;
+        } else {
+            writeBooksToFile(*head, booklist);
+        }
     }
     return;
 }
@@ -216,6 +233,18 @@ void deleteBook(List** head, const char* booklist) {
         free(temp);
     }
 
+    char applyChanges;
+    printw("\nApply Changes? (Y/n): ");
+    refresh();
+    echo();
+    curs_set(1);
+    scanw("%c", &applyChanges);
+    noecho();
+    curs_set(0);
+    if (applyChanges != 'N' && applyChanges != 'n') {
+        writeBooksToFile(*head, booklist);
+    }
+    
     printw("\nPress any key to continue...");
     refresh();
     getch();
