@@ -83,7 +83,7 @@ void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
     
     switch (selectedItemIndex) {
         case 0:
-            addBook(head, booklist);
+            addBook(head, booklist, 0);
             break;
         case 1:
             deleteBook(head, booklist);

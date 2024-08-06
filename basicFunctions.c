@@ -5,7 +5,7 @@
 #include <ncurses.h>
 #include "otherFunctions.h"
 
-void addBook(List** head, const char* booklist) {
+void addBook(List** head, const char* booklist, int isRecursed) {
     List* newNode = (List*)malloc(sizeof(List)); // Initialise new book node
 
     if(newNode == NULL) {
@@ -83,10 +83,7 @@ void addBook(List** head, const char* booklist) {
     printw("Book added successfully!\n");
     refresh();
 
-    free(newNode->book);
-    free(newNode);
-
-    char addAnother;
+    char addAnother; // Store yes/no
     printw("\nAdd Another? (y/N): ");
     refresh();
     echo();
@@ -95,22 +92,23 @@ void addBook(List** head, const char* booklist) {
     noecho();
     curs_set(0);
     if (addAnother == 'Y' || addAnother == 'y') {
-        addBook(head, booklist);
-    } else {
-        char applyChanges;
-        printw("\nApply Changes? (Y/n): ");
+        addBook(head, booklist, 1);
+    }
+
+    if (isRecursed == 0) {
+        char applyChanges; // Store yes/no
+        printw("\nApply Changes? (y/N): ");
         refresh();
         echo();
         curs_set(1);
-        scanf("%c", &applyChanges);
+        scanw("%c", &applyChanges);
         noecho();
         curs_set(0);
-        if (applyChanges == 'N' || applyChanges == 'n') {
-            return;
-        } else {
+        if (applyChanges == 'Y' || applyChanges == 'y') {
             writeBooksToFile(*head, booklist);
         }
     }
+
     return;
 }
 

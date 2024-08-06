@@ -33,7 +33,7 @@ typedef struct list {
 } List;
 
 // main.c
-void addBook(List** head, const char* booklist);
+void addBook(List** head, const char* booklist, int isRecursed);
 void freeBooks(List *head);
 List* readBooksFromFile(const char* booklist);
 
