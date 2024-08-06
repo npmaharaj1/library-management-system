@@ -126,8 +126,23 @@ void optionFour(int selectedItemIndex, List** head, const char* booklist) {
         }
 }
 
-void exitFunction(List* head) {
+void exitFunction(List* head, const char* booklist) {
     clear();
+
+    // Ask to apply changes
+    char applyChanges; // Store yes/no
+    printw("\nApply Changes? (y/N): ");
+    refresh();
+    echo();
+    curs_set(1);
+    scanw("%c", &applyChanges);
+    noecho();
+    curs_set(0);
+    if (applyChanges == 'Y' || applyChanges == 'y') {
+        writeBooksToFile(head, booklist);
+    }
+
+    // Free memory
     freeBooks(head);
     endwin();
     curs_set(1);
@@ -153,7 +168,7 @@ void menuHome(int* selectedItemIndex, int optionsCount, char* options[optionsCou
             menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
             break;
         case 4:
-            exitFunction(*head);
+            exitFunction(*head, booklist);
             break;
     }
     refresh();

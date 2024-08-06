@@ -44,7 +44,7 @@ void optionOne(int selectedItemIndex, List* head);
 void optionTwo(int selectedItemIndex, List** head, const char* booklist);
 void optionThree(int selectedItemIndex, List* head, const char* booklist);
 void optionFour(int selectedItemIndex, List** head, const char* booklist);
-void exitFunction(List* head);
+void exitFunction(List* head, const char* booklist);
 void menuHome(int* selectedItemIndex, int optionsCount, char *options[optionsCount], const char *prompt, List** head, const char* booklist);
 
 void writeBooksToFile(List* head, const char* booklist);
