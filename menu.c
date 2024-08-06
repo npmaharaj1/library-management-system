@@ -130,6 +130,7 @@ void exitFunction(List* head) {
     clear();
     freeBooks(head);
     endwin();
+    curs_set(1);
 }
 
 void menuHome(int* selectedItemIndex, int optionsCount, char* options[optionsCount], const char *prompt, List** head, const char* booklist) {
