@@ -151,8 +151,9 @@ void exitFunction(List* head, const char* booklist) {
 
     // Free memory
     freeBooks(head);
-    endwin();
+    echo();
     curs_set(1);
+    endwin();
 }
 
 void menuHome(int* selectedItemIndex, int optionsCount, char* options[optionsCount], const char *prompt, List** head, const char* booklist) {
