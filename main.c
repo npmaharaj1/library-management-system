@@ -8,6 +8,10 @@
 #include <ncurses.h> // For terminal control for UI
 #include "otherFunctions.h"
 
+int selectedItemIndexOriginal = 0; // Selected menu item in index form
+const char *promptOriginal = "Library Management System: Welcome, Admin\nSelect and option using the arrow keys on the keyboard.\n"; // Prewritten instructions for user
+char *optionsOriginal[5] = {"Search for Books", "Modify Book Data", "List Books", "Save or Restore", "Exit"};
+int optionsCountOriginal = sizeof(optionsOriginal) / sizeof(optionsOriginal[0]);
 
 //Read From File Function
 List* readBooksFromFile(const char* booklist) {

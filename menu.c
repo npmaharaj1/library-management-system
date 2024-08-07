@@ -75,7 +75,7 @@ void optionOne(int selectedItemIndex, List* head) {
 
 void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
     clear();
-    char *options[2] = {"Add Books", "Delete Books"};
+    char *options[3] = {"Add Books", "Delete Books", "Back"};
     const char *prompt = "Home/Modify Book Data/\n";
     int optionsCount = sizeof(options) / sizeof(options[0]);
     selectedItemIndex = 0;
@@ -88,6 +88,8 @@ void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
         case 1:
             deleteBook(head, booklist);
             break;
+        case 2:
+            menuHome(&selectedItemIndex, optionsCountOriginal, optionsOriginal, promptOriginal, head, booklist);
     }
 }
 
@@ -149,6 +151,9 @@ void exitFunction(List* head, const char* booklist) {
 }
 
 void menuHome(int* selectedItemIndex, int optionsCount, char* options[optionsCount], const char *prompt, List** head, const char* booklist) {
+    if (isendwin()) {
+        endwin();
+    }
     *selectedItemIndex = Run(optionsCount, *selectedItemIndex, options, prompt);
     switch (*selectedItemIndex) {
         case 0:
