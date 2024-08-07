@@ -88,9 +88,11 @@ void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
         case 1:
             deleteBook(head, booklist);
             break;
-        case 2:
+        case 2: //back button
             menuHome(&selectedItemIndex, optionsCountOriginal, optionsOriginal, promptOriginal, head, booklist);
+            return;
     }
+    optionTwo(selectedItemIndex, head, booklist);
 }
 
 void optionThree(int selectedItemIndex, List* head, const char* booklist) {
@@ -151,9 +153,6 @@ void exitFunction(List* head, const char* booklist) {
 }
 
 void menuHome(int* selectedItemIndex, int optionsCount, char* options[optionsCount], const char *prompt, List** head, const char* booklist) {
-    if (isendwin()) {
-        endwin();
-    }
     *selectedItemIndex = Run(optionsCount, *selectedItemIndex, options, prompt);
     switch (*selectedItemIndex) {
         case 0:

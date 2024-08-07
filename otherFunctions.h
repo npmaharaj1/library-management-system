@@ -32,10 +32,10 @@ typedef struct list {
     struct list* next;
 } List;
 
-extern int selectedItemIndexOriginal = 0; // Selected menu item in index form
-extern const char *promptOriginal = "Library Management System: Welcome, Admin\nSelect and option using the arrow keys on the keyboard.\n"; // Prewritten instructions for user
-extern char *optionsOriginal[5] = {"Search for Books", "Modify Book Data", "List Books", "Save or Restore", "Exit"};
-extern int optionsCountOriginal = sizeof(optionsOriginal) / sizeof(optionsOriginal[0]);
+extern int selectedItemIndexOriginal; // Selected menu item in index form
+extern const char *promptOriginal; // Prewritten instructions for user
+extern char *optionsOriginal[5];
+extern int optionsCountOriginal;
 
 // main.c
 void addBook(List** head, const char* booklist, int isRecursed);
