@@ -89,7 +89,7 @@ void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
             deleteBook(head, booklist);
             break;
         case 2: //back button
-            menuHome(&selectedItemIndex, optionsCountOriginal, optionsOriginal, promptOriginal, head, booklist);
+            endwin();
             return;
     }
     optionTwo(selectedItemIndex, head, booklist);
@@ -114,7 +114,7 @@ void optionThree(int selectedItemIndex, List* head, const char* booklist) {
 
 void optionFour(int selectedItemIndex, List** head, const char* booklist) {
     clear();
-    char *options[2] = {"Apply Changes", "Restore Changes"};
+    char *options[3] = {"Apply Changes", "Restore Changes", "Back"};
     const char *prompt = "Home/Save or Restore\n";
     int optionsCount = sizeof(options) / sizeof(options[0]);
     selectedItemIndex = 0;
@@ -126,6 +126,9 @@ void optionFour(int selectedItemIndex, List** head, const char* booklist) {
             break;
         case 1:
             *head = readBooksFromFile(booklist);
+            break;
+        case 2:
+            endwin();
             break;
         }
 }
