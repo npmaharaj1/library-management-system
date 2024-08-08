@@ -1,6 +1,6 @@
 # Default rule, build main executable.
-main: main.o menu.o basicFunctions.o
-	gcc main.o menu.o basicFunctions.o -lncurses -o main
+main: main.o menu.o basicFunctions.o bookDates.o
+	gcc main.o menu.o basicFunctions.o bookDates.o -lncurses -o main
 
 # Build main object file.
 main.o: main.c otherFunctions.h
@@ -11,6 +11,9 @@ menu.o: menu.c otherFunctions.h
 
 basicFunctions.o: basicFunctions.c otherFunctions.h
 	gcc -Wall -c basicFunctions.c
+
+bookDates.o: bookDates.c otherFunctions.h
+	gcc -Wall -c bookDates.c
 
 # Remove all object files and executable.
 clean:
