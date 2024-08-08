@@ -6,6 +6,7 @@
 #include "otherFunctions.h"
 
 void addBook(List** head, const char* booklist, int isRecursed) {
+    clear();
     List* newNode = (List*)malloc(sizeof(List)); // Initialise new book node
 
     if(newNode == NULL) {
@@ -92,7 +93,7 @@ void addBook(List** head, const char* booklist, int isRecursed) {
     noecho();
     curs_set(0);
     if (addAnother == 'Y' || addAnother == 'y') {
-        clear();
+        // clear();
         addBook(head, booklist, 1);
     }
 
