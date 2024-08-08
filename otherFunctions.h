@@ -6,6 +6,9 @@
 #define MAXNAMELENGTH 50 // Max length a name can be
 #define MAXEMAILLENGTH 100 // Max length an email can be
 
+// For strcasestr.
+#define _GNU_SOURCE
+
 typedef struct date { // this might need to go in a separate time.c file so that we can separate out the date handling later.
     int day;
     int month;

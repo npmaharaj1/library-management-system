@@ -1,6 +1,3 @@
-// For strcasestr.
-#define _GNU_SOURCE
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -97,38 +94,6 @@ void freeBooks(List *head) {
         free(current);
         current = next;
     }
-}
-
-// Search by title / author
-List* searchBooks (List* head, const char* searchTerm) { 
-    List* rHead = NULL; // Initialising head of the result list
-    List* rTail = NULL;
-    List* current = head;
-
-    // Loops through booklist
-    while(current != NULL) { 
-        // If substring match found in title and author (not case sensitive) 
-        if (strcasestr(current->book->Title, searchTerm) || strcasestr(current->book->Author, searchTerm)) {
-            // Assign values to temporary match 
-            List* match = (List*)malloc(sizeof(List));
-            match->book = (Book*)malloc(sizeof(Book));
-            memcpy(match->book->Title, current->book->Title, sizeof(current->book->Title));
-            memcpy(match->book->Author, current->book->Author, sizeof(current->book->Author));
-            match->book->ID = current->book->ID;
-            match->next = NULL;
-
-            // Updating Head + Tail if applicable
-            if (rHead == NULL) { 
-                rHead = match; 
-                rTail = match;
-            } else {
-                rTail->next = match;
-                rTail = rTail->next;
-            }
-        }
-        current = current->next;
-    }
-    return rHead; // Returns head for the linked list of matches
 }
 
 
