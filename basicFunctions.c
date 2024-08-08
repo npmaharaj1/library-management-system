@@ -93,7 +93,6 @@ void addBook(List** head, const char* booklist, int isRecursed) {
     noecho();
     curs_set(0);
     if (addAnother == 'Y' || addAnother == 'y') {
-        // clear();
         addBook(head, booklist, 1);
     }
 
