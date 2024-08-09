@@ -54,23 +54,72 @@ void optionOne(int selectedItemIndex, List* head) {
     wgetnstr(stdscr, search, sizeof(search) - 1);
     curs_set(0);
     noecho();
-    searchBooks(head, search);
     List* result = searchBooks(head, search);
 
     if (result == NULL) { // If no books found
         printw("No books found.\n");
+    } else {
+        int pageSize = 5; // Number of results per page
+        int pageCount = 0; // Number of pages
+        int resultCount = 0; // Number of results
+        List* current = result;
+
+        // Count the number of results
+        while (current != NULL) {
+            resultCount++;
+            current = current->next;
+        }
+
+        // Calculate the number of pages
+        if (resultCount % pageSize == 0) {
+            pageCount = resultCount / pageSize;
+        } else {
+            pageCount = resultCount / pageSize + 1;
+        }
+
+        // Display the results page by page
+        int currentPage = 1;
+        int startIndex = 0;
+        int endIndex = pageSize - 1;
+        int ch = 0; // Data to store keypad stuff
+
+        do {
+            clear();
+            printw("Search Results (%d/%d):\n\n", currentPage, pageCount);
+
+            // Loop through the results and display the current page
+            int i = 0;
+            current = result;
+            while (current != NULL && i < endIndex + 1) {
+                if (i >= startIndex) {
+                    printw("Title: %s\n", current->book->Title);
+                    printw("Author: %s\n", current->book->Author);
+                    printw("ID: %d\n", current->book->ID);
+                    printw("\n");
+                }
+                current = current->next;
+                i++;
+            }
+
+            // Display navigation options
+            printw("Press 'n' for next page, 'p' for previous page, or any other key to exit...");
+            refresh();
+
+            // Get user input
+            ch = getch();
+
+            // Update the start and end index based on user input
+            if (ch == 'n' && endIndex < resultCount - 1) {
+                startIndex += pageSize;
+                endIndex += pageSize;
+                currentPage++;
+            } else if (ch == 'p' && startIndex > 0) {
+                startIndex -= pageSize;
+                endIndex -= pageSize;
+                currentPage--;
+            }
+        } while (ch == 'n' || ch == 'p');
     }
-    // Loop through results list and display
-    while (result != NULL) {
-        printw("Title: %s\n", result->book->Title);
-        printw("Author: %s\n", result->book->Author);
-        printw("ID: %d\n", result->book->ID);
-        printw("\n");
-        result = result->next;
-    }
-    printw("\nPress any key to continue...");
-    refresh();
-    getch();
 }
 
 void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
