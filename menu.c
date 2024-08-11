@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <ncurses.h>
 #include "otherFunctions.h"
 
@@ -129,7 +130,7 @@ void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
     int optionsCount = sizeof(options) / sizeof(options[0]);
     selectedItemIndex = 0;
     selectedItemIndex = Run(optionsCount, selectedItemIndex, options, prompt);
-    
+
     switch (selectedItemIndex) {
         case 0:
             addBook(head, booklist, 0);
@@ -151,7 +152,16 @@ void optionThree(int selectedItemIndex, List* head, const char* booklist) {
     printw("Book list:\n\n");
     refresh();
     while (current != NULL) {
-        printw("ID: %d, Title: %s, Author: %s\n", current->book->ID, current->book->Title, current->book->Author);
+
+        // Only displaying borrowing data if applicable.
+        if (strlen(current->book->borrowedTo.name) != 0) {
+            printw("ID: %d, Title: %s, Author: %s, Borrowed to: %s, Due: %d/%d/%d\n", 
+                   current->book->ID, current->book->Title, current->book->Author, 
+                   current->book->borrowedTo.name, current->book->dueDate.day, 
+                   current->book->dueDate.month, current->book->dueDate.year);
+        } else {
+            printw("ID: %d, Title: %s, Author: %s\n", current->book->ID, current->book->Title, current->book->Author);
+        }
         refresh();
         current = current->next;
     }
@@ -161,7 +171,26 @@ void optionThree(int selectedItemIndex, List* head, const char* booklist) {
     getch();
 }
 
-void optionFour(int selectedItemIndex, List** head, const char* booklist) {
+void optionFour(int selectedItemIndex, List* head, const char* booklist) {
+    clear();
+    char input[100]; 
+
+    printw("\nEnter the book title: ");
+    refresh();
+    curs_set(1);
+    echo();
+    wgetnstr(stdscr, input, sizeof(input) - 1); // Prompts users for input (book title)
+    curs_set(0);
+    noecho();
+    loanBook(head, input);
+    refresh();
+
+    printw("Press any key to continue...");
+    refresh();
+    getch();
+}
+
+void optionFive(int selectedItemIndex, List** head, const char* booklist) {
     clear();
     char *options[3] = {"Apply Changes", "Restore Changes", "Back"};
     const char *prompt = "Home/Save or Restore\n";
@@ -221,10 +250,14 @@ void menuHome(int* selectedItemIndex, int optionsCount, char* options[optionsCou
             menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
             break;
         case 3:
-            optionFour(*selectedItemIndex, head, booklist);
+            optionFour(*selectedItemIndex, *head, booklist);
             menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
             break;
         case 4:
+            optionFive(*selectedItemIndex, head, booklist);
+            menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
+            break;
+        case 5:
             exitFunction(*head, booklist);
             break;
     }

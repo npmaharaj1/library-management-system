@@ -25,9 +25,9 @@ typedef struct books {
     int ID;
     char Title[MAXTITLELENGTH];
     char Author[MAXAUTHORLENGTH];
-    Date* issueDate;
-    Date* dueDate; 
-    Person* borrowedTo; // name of person who has borrowed the book.   
+    Date issueDate;
+    Date dueDate; 
+    Person borrowedTo; // name of person who has borrowed the book.   
 } Book;
 
 typedef struct list {
@@ -37,7 +37,7 @@ typedef struct list {
 
 extern int selectedItemIndexOriginal; // Selected menu item in index form
 extern const char *promptOriginal; // Prewritten instructions for user
-extern char *optionsOriginal[5];
+extern char *optionsOriginal[6];
 extern int optionsCountOriginal;
 
 // main.c
@@ -51,11 +51,14 @@ int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], co
 void optionOne(int selectedItemIndex, List* head);
 void optionTwo(int selectedItemIndex, List** head, const char* booklist);
 void optionThree(int selectedItemIndex, List* head, const char* booklist);
-void optionFour(int selectedItemIndex, List** head, const char* booklist);
+void optionFour(int selectedItemIndex, List* head, const char* booklist);
+void optionFive(int selectedItemIndex, List** head, const char* booklist);
 void exitFunction(List* head, const char* booklist);
 void menuHome(int* selectedItemIndex, int optionsCount, char *options[optionsCount], const char *prompt, List** head, const char* booklist);
 
 void writeBooksToFile(List* head, const char* booklist);
 void deleteBook(List** head, const char* booklist);
 List* searchBooks (List* head, const char* searchTerm);
+void loanBook(List* head, const char* input);
+time_t make_time(int day, int month, int year);
 #endif
