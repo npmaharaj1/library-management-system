@@ -24,6 +24,17 @@ void addBook(List** head, const char* booklist, int isRecursed) {
         return;
     }
 
+    // Set unused date / borrower fields to -1. 
+    newNode->book->issueDate.day = -1;
+    newNode->book->issueDate.month = -1;
+    newNode->book->issueDate.year = -1;
+    newNode->book->dueDate.day= -1;
+    newNode->book->dueDate.month= -1;
+    newNode->book->dueDate.month= -1;
+    newNode->book->borrowedTo.ID= -1;
+    newNode->book->borrowedTo.email[0]= 0; 
+    newNode->book->borrowedTo.name[0]= 0; 
+
     // Book id
     List* current = *head;
     if (current != NULL) {
@@ -252,7 +263,7 @@ void deleteBook(List** head, const char* booklist) {
 }
 
 // Search by title / author
-List* searchBooks (List* head, const char* searchTerm) { 
+List* searchBooks(List* head, const char* searchTerm) { 
     List* rHead = NULL; // Initialising head of the result list
     List* rTail = NULL;
     List* current = head;
@@ -281,4 +292,75 @@ List* searchBooks (List* head, const char* searchTerm) {
         current = current->next;
     }
     return rHead; // Returns head for the linked list of matches
+}
+
+// Assigns borrower and due date values to book.
+void loanBook(List* head, const char* input) {
+
+    // Check if input is empty
+    if (input == NULL || strlen(input) == 0) {
+        printw("\nBook name cannot be empty!\n");
+        refresh();
+        return;
+    }
+
+    List* current = head;
+
+    // Loops through booklist to find first title match for input
+    while(current != NULL) { 
+        // If substring match found in title (not case sensitive) 
+        if (strcasestr(current->book->Title, input)) {
+
+            // Input borrower name
+            printw("\nEnter Name of the Borrower: ");
+            refresh();
+            echo();
+            curs_set(1);
+            wgetnstr(stdscr, current->book->borrowedTo.name, sizeof(current->book->borrowedTo.name) - 1); // Accept Book Title input
+            noecho();
+            curs_set(0);
+
+            // Input due date
+            echo();
+            printw("\nEnter Due Date (dd/mm/yyyy): ");
+            refresh();
+            curs_set(1);   
+
+            // Input checking
+            if (scanw("%d/%d/%d", &current->book->dueDate.day, &current->book->dueDate.month, &current->book->dueDate.year)!=3) { // Accept Due Date input
+                printw("\nInvalid Date!\n");
+                refresh();
+                return;
+            }
+            if (make_time(current->book->dueDate.day, current->book->dueDate.month, current->book->dueDate.year) == -1) {
+                printw("\nInvalid Date!\n");
+                refresh();
+                return;
+            }
+            
+            // Return if successful
+            noecho();
+            curs_set(0);
+            printw("\nSuccessfully Updated!\n");
+            refresh();
+            return;
+        }
+        current = current->next;
+    }
+    
+    // If book not found in while loop:
+    printw("\nBook not found!\n");
+    refresh();
+    return;
+}
+
+// Function to convert date format to time_t (seconds since 1900)
+time_t make_time(int day, int month, int year) {
+    struct tm date = {0};
+    date.tm_mday = day;
+    date.tm_mon = month - 1;
+    date.tm_year = year - 1900;
+
+    time_t result = mktime(&date);
+    return result;
 }

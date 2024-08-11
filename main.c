@@ -7,7 +7,7 @@
 
 int selectedItemIndexOriginal = 0; // Selected menu item in index form
 const char *promptOriginal = "Library Management System: Welcome, Admin\nSelect and option using the arrow keys on the keyboard.\n"; // Prewritten instructions for user
-char *optionsOriginal[5] = {"Search for Books", "Modify Book Data", "List Books", "Save or Restore", "Exit"};
+char *optionsOriginal[6] = {"Search for Books", "Modify Book Data", "List Books", "Loan Book", "Save or Restore", "Exit"};
 int optionsCountOriginal = sizeof(optionsOriginal) / sizeof(optionsOriginal[0]);
 
 //Read From File Function
@@ -63,7 +63,7 @@ void writeBooksToFile(List* head, const char* booklist) {
     }
 
     // Count the number of books in the list
-    int count = 0;
+   int count = 0;
     List* current = head;
     while (current != NULL) {
         count++;
@@ -140,7 +140,7 @@ int main() {
     // Visual Stuff
     int selectedItemIndex = 0; // Selected menu item in index form
     const char *prompt = "Library Management System: Welcome, Admin\nSelect and option using the arrow keys on the keyboard.\n"; // Prewritten instructions for user
-    char *options[5] = {"Search for Books", "Modify Book Data", "List Books", "Save or Restore", "Exit"};
+    char *options[6] = {"Search for Books", "Modify Book Data", "List Books", "Loan Book", "Save or Restore", "Exit"};
     int optionsCount = sizeof(options) / sizeof(options[0]);
     
     menuHome(&selectedItemIndex, optionsCount, options, prompt, &head, booklist);
