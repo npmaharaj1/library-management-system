@@ -34,9 +34,9 @@ int Run(int optionsCount, int selectedItemIndex, char *options[optionsCount], co
                 }
                 break;
             case KEY_DOWN:
-            if (selectedItemIndex < optionsCount - 1) {
-                selectedItemIndex++;
-            }
+                if (selectedItemIndex < optionsCount - 1) {
+                    selectedItemIndex++;
+                }
             break;
         }
         displayOptions(optionsCount, options, prompt, selectedItemIndex);
