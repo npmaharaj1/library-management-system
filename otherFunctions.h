@@ -5,6 +5,7 @@
 #define MAXAUTHORLENGTH 50 // Max length an Authors name can be
 #define MAXNAMELENGTH 50 // Max length a name can be
 #define MAXEMAILLENGTH 100 // Max length an email can be
+#define MAXFINE 220 // Max amount a fine can cost
 
 // For strcasestr.
 #define _GNU_SOURCE
@@ -61,4 +62,7 @@ void deleteBook(List** head, const char* booklist);
 List* searchBooks (List* head, const char* searchTerm);
 void loanBook(List* head, const char* input);
 time_t make_time(int day, int month, int year);
+int calculateHoursDifference(struct tm *start, struct tm *end);
+int calculateOverDueHours(Book* book);
+int calculateFine(Book* book);
 #endif

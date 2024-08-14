@@ -155,10 +155,11 @@ void optionThree(int selectedItemIndex, List* head, const char* booklist) {
 
         // Only displaying borrowing data if applicable.
         if (strlen(current->book->borrowedTo.name) != 0) {
-            printw("ID: %d, Title: %s, Author: %s, Borrowed to: %s, Due: %d/%d/%d\n", 
+            printw("ID: %d, Title: %s, Author: %s, Borrowed to: %s, Due: %d/%d/%d, Hours Overdue: %d, Current Fine: $%d\n", 
                    current->book->ID, current->book->Title, current->book->Author, 
                    current->book->borrowedTo.name, current->book->dueDate.day, 
-                   current->book->dueDate.month, current->book->dueDate.year);
+                   current->book->dueDate.month, current->book->dueDate.year,
+                   calculateOverDueHours(current->book), calculateFine(current->book));
         } else {
             printw("ID: %d, Title: %s, Author: %s\n", current->book->ID, current->book->Title, current->book->Author);
         }
