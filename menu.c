@@ -250,10 +250,12 @@ void menuHome(int* selectedItemIndex, int optionsCount, char* options[optionsCou
             optionThree(*selectedItemIndex, *head, booklist);
             menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
             break;
+            // Add options for listing by currently loaned items, overdue items, all, not loaned.
         case 3:
             optionFour(*selectedItemIndex, *head, booklist);
             menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
             break;
+            // Add options for time enter due date or how many days in the future.
         case 4:
             optionFive(*selectedItemIndex, head, booklist);
             menuHome(selectedItemIndex, optionsCount, options, prompt, head, booklist);
