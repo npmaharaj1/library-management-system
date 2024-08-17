@@ -294,6 +294,23 @@ List* searchBooks(List* head, const char* searchTerm) {
     return rHead; // Returns head for the linked list of matches
 }
 
+void getFutureDate (Date* futureDate, int daysIntoFuture) {
+    // Get the current time
+    time_t t = time(NULL);
+    struct tm *currentTime = localtime(&t);
+    
+    //Add specified number of days to the current date
+    currentTime->tm_mday += daysIntoFuture;
+
+    // Normalise the time structure (month/year overflow)
+    mktime(currentTime);
+
+    // Populate the futureDate struct with the new date
+    futureDate->day = currentTime->tm_mday;
+    futureDate->month = currentTime->tm_mon + 1; // tm_mon is 0 indexed
+    futureDate->year = currentTime->tm_year + 1900; // tm_year is years since 1900
+}
+
 // Assigns borrower and due date values to book.
 void loanBook(List* head, const char* input) {
 
@@ -320,30 +337,97 @@ void loanBook(List* head, const char* input) {
             noecho();
             curs_set(0);
 
-            // Input due date
+            printw("\nPlease enter your perferred due time format.");
             echo();
-            printw("\nEnter Due Date (dd/mm/yyyy): ");
+            printw("\nEnter 1 for due by a specified date (dd/mm/yyyy).");
+            printw("\nEnter 2 for due by loan length (no. of days).\n");
             refresh();
-            curs_set(1);   
+            curs_set(1);
+            int choice = 0; 
+            scanw("%d", &choice);  
 
-            // Input checking
-            if (scanw("%d/%d/%d", &current->book->dueDate.day, &current->book->dueDate.month, &current->book->dueDate.year)!=3) { // Accept Due Date input
-                printw("\nInvalid Date!\n");
+            // Due date by specified date.
+            if (choice == 1) { 
+                noecho();
+                curs_set(0);
+                // Input due date
+                echo();
+                printw("\nEnter Due Date (dd/mm/yyyy): ");
+                refresh();
+                curs_set(1);   
+
+                // Input checking
+                if (scanw("%d/%d/%d", &current->book->dueDate.day, &current->book->dueDate.month, &current->book->dueDate.year)!=3) { // Accept Due Date input
+                    printw("\nInvalid Date!\n");
+                    refresh();
+                    return;
+                }
+                if (make_time(current->book->dueDate.day, current->book->dueDate.month, current->book->dueDate.year) == -1) {
+                    printw("\nInvalid Date!\n");
+                    refresh();
+                    return;
+                }
+                if (time(NULL)>make_time(current->book->dueDate.day, current->book->dueDate.month, current->book->dueDate.year)) {
+                    printw("\nInvalid Date: Due date has already occured!\n");
+                    refresh();
+                    return;
+                }
+
+                // Return if successful
+                noecho();
+                curs_set(0);
+                printw("\nSuccessfully Updated!\n");
+                refresh();
+                return;
+
+            // Due date by specified no. of days.
+            } else if (choice == 2) {
+                noecho();
+                curs_set(0);
+                
+                time_t secsInDay = 86400;
+                time_t now = time(NULL);
+
+                echo();
+                printw("\nEnter loan length (no. of days) from today: ");
+                refresh();
+                curs_set(1); 
+
+                int loanLength;
+
+                // Input checking
+                if (scanw("%d", &loanLength)!=1) { // Accept Due Date input
+                    printw("\nInvalid Input!\n");
+                    refresh();
+                    return;
+                }
+                if (loanLength <= 0) { 
+                    printw("\nInvalid Input!\n");
+                    refresh();
+                    return;
+                }
+
+                // Assigns date values to book.
+                getFutureDate(&current->book->dueDate, loanLength);
+
+                // Return if successful
+                noecho();
+                curs_set(0);
+                printw("\nSuccessfully Updated!\n");
+                refresh();
+                return;
+
+
+            // Invalid option.
+            } else {
+                noecho();
+                curs_set(0);
+
+                printw("\nInvalid Option!\n");
                 refresh();
                 return;
             }
-            if (make_time(current->book->dueDate.day, current->book->dueDate.month, current->book->dueDate.year) == -1) {
-                printw("\nInvalid Date!\n");
-                refresh();
-                return;
-            }
-            
-            // Return if successful
-            noecho();
-            curs_set(0);
-            printw("\nSuccessfully Updated!\n");
-            refresh();
-            return;
+
         }
         current = current->next;
     }
