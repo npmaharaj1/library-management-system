@@ -124,6 +124,7 @@ int main() {
     initscr(); // ncurses.h terminal
     cbreak();
     noecho();
+    mousemask(0, NULL); // Disable the mouse
     keypad(stdscr, TRUE); // Enable keypad
     curs_set(0);
 
