@@ -146,30 +146,83 @@ void optionTwo(int selectedItemIndex, List** head, const char* booklist) {
 }
 
 void optionThree(int selectedItemIndex, List* head, const char* booklist) {
+
     clear();
-    // TODO: Make a better list function
+    char *options[5] = {"Loaned Items", "Unloaned Items", "Overdue Items", "All Items", "Back"};
+    const char *prompt = "Home/List Books\n";
+    int optionsCount = sizeof(options) / sizeof(options[0]);
     List *current = head;
-    printw("Book list:\n\n");
-    refresh();
-    while (current != NULL) {
+    selectedItemIndex = 0;
+    selectedItemIndex = Run(optionsCount, selectedItemIndex, options, prompt);
+    switch (selectedItemIndex) {
+        case 0: // List all loaned Items
+            current = head;
+            clear();
+            printw("Book list:\n\n");
+            refresh();
+            while (current != NULL) {
+                if (strlen(current->book->borrowedTo.name) != 0) {
+                    printw(">>> ID: %d, Title: %s, Author: %s, Borrowed to: %s, Due: %d/%d/%d\n", 
+                        current->book->ID, current->book->Title, current->book->Author, 
+                        current->book->borrowedTo.name, current->book->dueDate.day, 
+                        current->book->dueDate.month, current->book->dueDate.year);
+                }
+                refresh();
+                current = current->next;
+            }
+            printw("Press any key to continue...");
+            refresh();
+            getch();
+            break;
+        case 1:
+            current = head;
+            clear();
+            printw("Book list:\n\n");
+            refresh();
+            while (current != NULL) {
+                if (strlen(current->book->borrowedTo.name) == 0) {
+                    printw(">>> ID: %d, Title: %s, Author: %s, Borrowed to: %s, Due: %d/%d/%d\n", 
+                        current->book->ID, current->book->Title, current->book->Author, 
+                        current->book->borrowedTo.name, current->book->dueDate.day, 
+                        current->book->dueDate.month, current->book->dueDate.year);
+                }
+                refresh();
+                current = current->next;
+            }
+            printw("Press any key to continue...");
+            refresh();
+            getch();
+            break;
+        case 2:
+            break;
+        case 3:
+            current = head;
+            clear();
+            // TODO: Make a better list function
+            printw("Book list:\n\n");
+            refresh();
+            while (current != NULL) {
+                // Only displaying borrowing data if applicable.
+                if (strlen(current->book->borrowedTo.name) != 0) {
+                    printw(">>> ID: %d, Title: %s, Author: %s, Borrowed to: %s, Due: %d/%d/%d\n", 
+                        current->book->ID, current->book->Title, current->book->Author, 
+                        current->book->borrowedTo.name, current->book->dueDate.day, 
+                        current->book->dueDate.month, current->book->dueDate.year);
+                } else {
+                    printw(">>> ID: %d, Title: %s, Author: %s\n", current->book->ID, current->book->Title, current->book->Author);
+                }
+                refresh();
+                current = current->next;
+            }
 
-        // Only displaying borrowing data if applicable.
-        if (strlen(current->book->borrowedTo.name) != 0) {
-            printw("ID: %d, Title: %s, Author: %s, Borrowed to: %s, Due: %d/%d/%d, Hours Overdue: %d, Current Fine: $%d\n", 
-                   current->book->ID, current->book->Title, current->book->Author, 
-                   current->book->borrowedTo.name, current->book->dueDate.day, 
-                   current->book->dueDate.month, current->book->dueDate.year,
-                   calculateOverDueHours(current->book), calculateFine(current->book));
-        } else {
-            printw("ID: %d, Title: %s, Author: %s\n", current->book->ID, current->book->Title, current->book->Author);
-        }
-        refresh();
-        current = current->next;
+            printw("Press any key to continue...");
+            refresh();
+            getch();
+            break;
+        case 4:
+            endwin();
+            break;
     }
-
-    printw("Press any key to continue...");
-    refresh();
-    getch();
 }
 
 void optionFour(int selectedItemIndex, List* head, const char* booklist) {
@@ -230,8 +283,15 @@ void exitFunction(List* head, const char* booklist) {
 
     // Free memory
     freeBooks(head);
+    
+    // Fix terminal
     echo();
     curs_set(1);
+    mousemask(ALL_MOUSE_EVENTS, NULL);
+    use_default_colors();
+    attron(COLOR_PAIR(0));
+
+
     endwin();
 }
 
